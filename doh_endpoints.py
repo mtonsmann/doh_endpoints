@@ -2,7 +2,7 @@
 
 from html.parser import HTMLParser
 from collections import OrderedDict
-from socket import getaddrinfo, AF_INET6, gaierror
+from socket import getaddrinfo, AF_INET6, AF_INET, gaierror
 import urllib.request
 import urllib.parse 
 import argparse
@@ -45,7 +45,7 @@ def parseResults(parser):
                                             'url': purl.geturl()}
         try:
             if purl.hostname:
-                ips = set([x[-1][0] for x in getaddrinfo(purl.hostname, None)])
+                ips = set([x[-1][0] for x in getaddrinfo(purl.hostname, None, AF_INET)])
                 doh_locations[purl.hostname]['ip'] = ips
         except gaierror:
             doh_locations[purl.hostname]['ip'] = []
