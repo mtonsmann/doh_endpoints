@@ -53,7 +53,8 @@ def parseResults(parser):
 
         try:
             ipv6s = set([x[-1][0] for x in getaddrinfo(purl.hostname, None, AF_INET6)])
-            doh_locations[purl.hostname]['ipv6'] = ipv6s
+            doh_locations[purl.hostname]['ipv6'] = [ipv6 for ipv6 in ipv6s if '::ffff' not in ipv6]
+
         except gaierror:
             doh_locations[purl.hostname]['ipv6'] = []
             pass
@@ -116,4 +117,6 @@ else:
     for endpoint,values in results.items():
         for ip in values['ip']:
             print(args.delimiter.join([endpoint, values['url'], ip]))
+        for ipv6 in values['ipv6']:
+            print(args.delimiter.join([endpoint, values['url'], ipv6]))
 
